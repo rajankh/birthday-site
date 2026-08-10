@@ -3,228 +3,233 @@ const ctx = canvas.getContext("2d");
 
 const textBox = document.getElementById("text");
 const codeBox = document.getElementById("code");
-const clockBox = document.getElementById("clock-box");
-const clock = document.getElementById("clock");
-
-let W = 1100;
-let H = 680;
-
-canvas.width = W;
-canvas.height = H;
 
 
-/* =========================================
-   BIRTHDAY MESSAGE
-========================================= */
+/* ==========================================
+   CANVAS
+========================================== */
 
-const messages = [
-    "Hey you 💕",
-    "Happy Birthday 🎂",
-    "May God bless you 🌷",
-    "And give u many happiness ❤️",
-    "Just saying... you're pretty awesome 💞",
-    "Sending good vibes and maybe a wink 😉",
-    "Hope u have a great day today 💖"
-];
+const DESIGN_WIDTH = 1100;
+const DESIGN_HEIGHT = 680;
 
-function showMessage() {
+canvas.width = DESIGN_WIDTH;
+canvas.height = DESIGN_HEIGHT;
 
-    textBox.style.display = "block";
+function resizeCanvas() {
 
-    let line = 0;
+    const scaleX =
+        window.innerWidth / DESIGN_WIDTH;
 
-    function typeLine() {
+    const scaleY =
+        window.innerHeight / DESIGN_HEIGHT;
 
-        if (line >= messages.length) {
-            return;
-        }
+    const scale =
+        Math.min(scaleX, scaleY);
 
-        const span = document.createElement("span");
+    canvas.style.width =
+        DESIGN_WIDTH * scale + "px";
 
-        span.className = "say";
+    canvas.style.height =
+        DESIGN_HEIGHT * scale + "px";
 
-        codeBox.appendChild(span);
+    canvas.style.position = "absolute";
 
-        const message = messages[line];
+    canvas.style.left =
+        (window.innerWidth -
+            DESIGN_WIDTH * scale) / 2 + "px";
 
-        let character = 0;
-
-        function typeCharacter() {
-
-            if (character < message.length) {
-
-                span.textContent += message[character];
-
-                character++;
-
-                setTimeout(typeCharacter, 60);
-
-            } else {
-
-                line++;
-
-                setTimeout(typeLine, 350);
-            }
-        }
-
-        typeCharacter();
-    }
-
-    typeLine();
+    canvas.style.top =
+        (window.innerHeight -
+            DESIGN_HEIGHT * scale) / 2 + "px";
 }
 
+resizeCanvas();
 
-/* =========================================
-   CLOCK
-========================================= */
-
-const startDate = new Date();
-
-startDate.setDate(startDate.getDate() - 577);
-
-function updateClock() {
-
-    const now = new Date();
-
-    let seconds =
-        Math.floor(
-            (now.getTime() - startDate.getTime()) / 1000
-        );
-
-    const days =
-        Math.floor(seconds / 86400);
-
-    seconds %= 86400;
-
-    const hours =
-        Math.floor(seconds / 3600);
-
-    seconds %= 3600;
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    seconds %= 60;
-
-    clock.innerHTML =
-        `<span class="digit">${days}</span> days ` +
-        `<span class="digit">${hours}</span> hours ` +
-        `<span class="digit">${minutes}</span> minutes ` +
-        `<span class="digit">${seconds}</span> seconds`;
-}
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
 
 
-/* =========================================
-   TREE DATA
-========================================= */
+/* ==========================================
+   TREE
+========================================== */
 
 const branches = [];
 const flowers = [];
 
-function addBranch(
+
+function createBranch(
     x,
     y,
     length,
     angle,
-    thickness,
+    width,
     depth
 ) {
 
     const endX =
-        x + Math.cos(angle) * length;
+        x +
+        Math.cos(angle) *
+        length;
 
     const endY =
-        y + Math.sin(angle) * length;
+        y +
+        Math.sin(angle) *
+        length;
 
-    const branch = {
+
+    const currentBranch = {
+
         x1: x,
         y1: y,
+
         x2: endX,
         y2: endY,
-        thickness: thickness,
+
+        width: width,
+
         depth: depth,
+
         progress: 0,
-        delay: (7 - depth) * 180
+
+        delay:
+            (7 - depth) *
+            170
     };
 
-    branches.push(branch);
 
-    if (depth <= 0) {
+    branches.push(
+        currentBranch
+    );
+
+
+    if (depth === 0) {
 
         flowers.push({
+
             x: endX,
             y: endY,
-            size: 3 + Math.random() * 3,
-            rotation: Math.random() * Math.PI,
-            alpha: 0
+
+            size:
+                3 +
+                Math.random() * 3,
+
+            rotation:
+                Math.random() *
+                Math.PI,
+
+            alpha: 0,
+
+            phase:
+                Math.random() *
+                Math.PI * 2
         });
 
         return;
     }
 
+
     const nextLength =
-        length * (0.62 + Math.random() * 0.08);
+        length *
+        (0.62 +
+        Math.random() * 0.08);
 
-    const angleChange =
-        0.22 + Math.random() * 0.18;
 
-    addBranch(
+    const spread =
+        0.20 +
+        Math.random() * 0.18;
+
+
+    createBranch(
+
         endX,
         endY,
+
         nextLength,
-        angle - angleChange,
-        Math.max(1, thickness * 0.68),
+
+        angle - spread,
+
+        Math.max(
+            1,
+            width * 0.68
+        ),
+
         depth - 1
     );
 
-    addBranch(
+
+    createBranch(
+
         endX,
         endY,
+
         nextLength,
-        angle + angleChange,
-        Math.max(1, thickness * 0.68),
+
+        angle + spread,
+
+        Math.max(
+            1,
+            width * 0.68
+        ),
+
         depth - 1
     );
 }
 
-
-/* =========================================
-   CREATE TREE
-========================================= */
 
 function createTree() {
 
     branches.length = 0;
+
     flowers.length = 0;
 
-    addBranch(
-        W / 2,
-        H + 20,
+
+    createBranch(
+
+        DESIGN_WIDTH / 2,
+
+        DESIGN_HEIGHT + 20,
+
         190,
+
         -Math.PI / 2,
+
         18,
+
         7
     );
 }
 
+
 createTree();
 
 
-/* =========================================
-   DRAW BRANCH
-========================================= */
+/* ==========================================
+   DRAW BRANCHES
+========================================== */
 
 function drawBranch(branch) {
 
-    const currentX =
+    const x =
+
         branch.x1 +
-        (branch.x2 - branch.x1) *
+
+        (branch.x2 -
+            branch.x1) *
+
         branch.progress;
 
-    const currentY =
+
+    const y =
+
         branch.y1 +
-        (branch.y2 - branch.y1) *
+
+        (branch.y2 -
+            branch.y1) *
+
         branch.progress;
+
 
     ctx.beginPath();
 
@@ -234,118 +239,173 @@ function drawBranch(branch) {
     );
 
     ctx.lineTo(
-        currentX,
-        currentY
+        x,
+        y
     );
 
-    ctx.strokeStyle = "#795548";
+
+    ctx.strokeStyle =
+        "#795548";
 
     ctx.lineWidth =
-        branch.thickness;
+        branch.width;
 
-    ctx.lineCap = "round";
+    ctx.lineCap =
+        "round";
 
     ctx.stroke();
 }
 
 
-/* =========================================
-   DRAW FLOWER
-========================================= */
+/* ==========================================
+   DRAW FLOWERS
+========================================== */
 
-function drawFlower(flower, time) {
+function drawFlower(
+    flower,
+    time
+) {
 
-    const sway =
+    const movement =
+
         Math.sin(
-            time / 700 +
-            flower.x
+            time / 900 +
+            flower.phase
         ) * 2;
+
 
     ctx.save();
 
+
     ctx.translate(
-        flower.x + sway,
+
+        flower.x +
+        movement,
+
         flower.y
     );
+
 
     ctx.rotate(
         flower.rotation
     );
 
+
     ctx.globalAlpha =
         flower.alpha;
 
-    ctx.fillStyle = "#e91e63";
+
+    ctx.fillStyle =
+        "#e91e63";
+
 
     ctx.font =
         `${flower.size * 5}px Arial`;
 
-    ctx.textAlign = "center";
 
-    ctx.textBaseline = "middle";
+    ctx.textAlign =
+        "center";
 
-    ctx.fillText("♥", 0, 0);
+
+    ctx.textBaseline =
+        "middle";
+
+
+    ctx.fillText(
+        "♥",
+        0,
+        0
+    );
+
 
     ctx.restore();
 }
 
 
-/* =========================================
-   ANIMATION
-========================================= */
+/* ==========================================
+   TREE ANIMATION
+========================================== */
 
 const animationStart =
     performance.now();
 
-function animate(time) {
+
+function animateTree(time) {
 
     ctx.clearRect(
         0,
         0,
-        W,
-        H
+        DESIGN_WIDTH,
+        DESIGN_HEIGHT
     );
 
+
     const elapsed =
-        time - animationStart;
+        time -
+        animationStart;
 
 
-    /* Tree growth */
+    /* Grow branches */
 
-    for (const branch of branches) {
+    for (
+        const branch
+        of branches
+    ) {
 
         const start =
             branch.delay;
 
-        const duration = 900;
+
+        const duration =
+            900;
+
 
         branch.progress =
+
             Math.max(
+
                 0,
+
                 Math.min(
+
                     1,
-                    (elapsed - start) /
+
+                    (
+                        elapsed -
+                        start
+                    ) /
                     duration
                 )
             );
 
-        drawBranch(branch);
+
+        drawBranch(
+            branch
+        );
     }
 
 
-    /* Flowers */
+    /* Flowers appear after tree */
 
-    const flowerStart = 4000;
+    if (
+        elapsed > 4200
+    ) {
 
-    if (elapsed > flowerStart) {
-
-        for (const flower of flowers) {
+        for (
+            const flower
+            of flowers
+        ) {
 
             flower.alpha =
+
                 Math.min(
+
                     1,
-                    flower.alpha + 0.015
+
+                    flower.alpha +
+                    0.015
                 );
+
 
             drawFlower(
                 flower,
@@ -356,32 +416,134 @@ function animate(time) {
 
 
     requestAnimationFrame(
-        animate
+        animateTree
     );
 }
 
 
-/* =========================================
-   START
-========================================= */
-
-clockBox.style.display = "block";
-
-updateClock();
-
-setInterval(
-    updateClock,
-    1000
-);
-
 requestAnimationFrame(
-    animate
+    animateTree
 );
 
 
-/* Start message after tree grows */
+/* ==========================================
+   BIRTHDAY MESSAGE
+========================================== */
+
+const messages = [
+
+    "Hey you 💕",
+
+    "Happy Birthday 🎂",
+
+    "May God bless you 🌷",
+
+    "And give u many happiness ❤️",
+
+    "Just saying... you're pretty awesome 💞",
+
+    "Sending good vibes and maybe a wink 😉",
+
+    "Hope u have a great day today 💖"
+
+];
+
+
+function typeMessages() {
+
+    textBox.style.display =
+        "block";
+
+
+    let line = 0;
+
+
+    function nextLine() {
+
+        if (
+            line >=
+            messages.length
+        ) {
+
+            return;
+        }
+
+
+        const span =
+            document.createElement(
+                "span"
+            );
+
+
+        span.className =
+            "say";
+
+
+        codeBox.appendChild(
+            span
+        );
+
+
+        const message =
+            messages[line];
+
+
+        let character = 0;
+
+
+        function typeCharacter() {
+
+            if (
+                character <
+                message.length
+            ) {
+
+                span.textContent +=
+                    message[
+                        character
+                    ];
+
+
+                character++;
+
+
+                setTimeout(
+
+                    typeCharacter,
+
+                    65
+                );
+
+            } else {
+
+                line++;
+
+
+                setTimeout(
+
+                    nextLine,
+
+                    400
+                );
+            }
+        }
+
+
+        typeCharacter();
+    }
+
+
+    nextLine();
+}
+
+
+/* ==========================================
+   START MESSAGE
+========================================== */
 
 setTimeout(
-    showMessage,
-    5000
+
+    typeMessages,
+
+    5200
 );
