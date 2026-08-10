@@ -4,104 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Happy Birthday ❤️</title>
+    <title>Happy Birthday</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Start Screen -->
-    <div id="startScreen">
-        <div class="start-box">
-            <div class="gift">🎁</div>
+    <div id="wrap">
 
-            <h1>Someone has a surprise for you 💖</h1>
+        <div id="text">
+            <div id="code">
 
-            <p>Click the button to open it...</p>
-
-            <button id="startButton">
-                Open Your Surprise 💝
-            </button>
-        </div>
-    </div>
-
-
-    <!-- Main Website -->
-    <div id="main" style="display: none;">
-
-        <!-- Music -->
-        <audio id="myAudio" loop>
-            <source src="aud.mp3" type="audio/mpeg">
-        </audio>
-
-
-        <div id="wrap">
-
-            <!-- Birthday Messages -->
-            <div id="text">
-
-                <div id="code">
-
-                    <span class="say">
-                        Hey you 💕
-                    </span>
-                    <br>
-
-                    <span class="say">
-                        Happy Birthday 🎂
-                    </span>
-                    <br>
-
-                    <span class="say">
-                        May God bless you 🍀
-                    </span>
-                    <br>
-
-                    <span class="say">
-                        And give u many happiness 💕
-                    </span>
-                    <br>
-
-                    <span class="say">
-                        Just saying... you're pretty awesome ❤️
-                    </span>
-                    <br>
-
-                    <span class="say">
-                        Sending good vibes and maybe a wink 😉
-                    </span>
-                    <br>
-
-                    <span class="say">
-                        Hope u have a great day today 💖🎉
-                    </span>
-                    <br>
-
-                    <span class="say final">
-                        Happy Birthday once again! 🥳❤️
-                    </span>
-
-                </div>
+                <span class="say">Hey you 💕</span><br>
+                <span class="say">Happy Birthday 🎂</span><br>
+                <span class="say">May God bless you 🌷</span><br>
+                <span class="say">And give u many happiness ❤️</span><br>
+                <span class="say">Just saying... you're pretty awesome 💞</span><br>
+                <span class="say">Sending good vibes and maybe a wink 😉</span><br>
+                <span class="say">Hope u have a great day today 💖</span><br>
 
             </div>
-
-
-            <!-- Timer -->
-            <div id="clock-box">
-
-                <span id="clock">
-                    Happy Birthday ❤️
-                </span>
-
-            </div>
-            <!-- Animation Canvas -->
-            <canvas id="canvas" width="1100" height="680"></canvas>
-
         </div>
 
-    </div>
+        <div id="clock-box">
+            <span id="clock"></span>
+        </div>
 
+        <canvas id="canvas"></canvas>
+
+    </div>
 
     <script src="script.js"></script>
 
