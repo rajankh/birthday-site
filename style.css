@@ -1,104 +1,102 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
 body {
     margin: 0;
     padding: 0;
-
-    background: #ffe;
-
-    font-size: 14px;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
-    color: #231F20;
-
-    overflow: auto;
+    width: 100%;
+    height: 100%;
 }
 
-#main {
-    width: 100%;
+body {
+    background: #ffe;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #wrap {
     position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
 
-    margin: 0 auto;
-
-    width: 1100px;
-    height: 680px;
-
-    margin-top: 10px;
+#canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
 
 #text {
-    width: 400px;
-    height: 425px;
-
-    left: 60px;
-    top: 80px;
-
     position: absolute;
-
     z-index: 10;
+
+    left: 8%;
+    top: 15%;
+
+    width: 380px;
+
+    color: #444;
+    font-size: 17px;
+    line-height: 1.8;
+
+    display: none;
 }
 
 #code {
-    display: none;
+    white-space: normal;
+}
 
-    font-size: 16px;
-
-    line-height: 1.8;
+.say {
+    display: block;
+    opacity: 1;
 }
 
 #clock-box {
     position: absolute;
+    z-index: 10;
 
-    left: 60px;
-    top: 550px;
+    left: 8%;
+    bottom: 8%;
 
-    font-size: 28px;
+    color: #555;
+
+    font-size: 18px;
 
     display: none;
-
-    z-index: 10;
 }
 
 #clock {
-    margin-left: 48px;
+    white-space: nowrap;
 }
 
-#clock .digit {
-    font-size: 64px;
+.digit {
+    font-size: 40px;
 }
 
-#canvas {
-    margin: 0 auto;
+@media (max-width: 700px) {
 
-    width: 1100px;
-    height: 680px;
+    #text {
+        left: 5%;
+        top: 10%;
 
-    display: block;
-}
+        width: 90%;
 
-#error {
-    margin: 0 auto;
+        font-size: 14px;
+    }
 
-    text-align: center;
+    #clock-box {
+        left: 5%;
+        bottom: 5%;
 
-    margin-top: 60px;
+        font-size: 14px;
+    }
 
-    display: none;
-}
-
-.hand {
-    cursor: pointer;
-}
-
-.say {
-    margin-left: 5px;
-}
-
-.space {
-    margin-right: 150px;
+    .digit {
+        font-size: 25px;
+    }
 }
